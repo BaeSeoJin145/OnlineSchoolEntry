@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" type="image/png" href="./image/kakaotalk_20250308_170326905.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <title>온라인 출입 시스템</title>
+</head>
+<div>
+<body>
+  <h1>STUDENT | 학생</h1>
+    <button id="requestPageBtn">출입 요청</button>
+    <button id="qrGenerateFormBtn">QR 생성</button>
+
+
+  <div id="requestForm" style="display: none;">
+    <h1>출입 요청</h1>
+
+    
+      <label for="studentId">학번:</label>
+      <input type="text" id="studentId" placeholder="학번 입력"/>
+      <label for="studentName">이름:</label>
+      <input type="text" id="studentName" placeholder="이름 입력"/>
+      <label for="studentDate">사용하고자 하는 날짜:</label>
+      <input type="date" id="studentDate" placeholder="날짜 입력"/>
+      <label for="studentReason">사유:</label>
+      <input type="text" id="studentReason" placeholder="(예:동아리 뚝딱뚝딱 공돌이)" />
+      <label for="studentTeacher">담당 교사:</label>
+      <select id="studentTeacher">
+      </select>
+
+
+      <br>
+      <button id="uploadStudentData">요청하기</button>
+
+  </div>
+
+
+  <div id="qrGenerateForm" style="display: none;">
+    <h1>QR 생성</h1>
+    <label for="qrStudentId">학번:</label>
+    <input type="text" id="qrStudentId" placeholder="학번 입력" />
+    <label for="qrStudentName">이름:</label>
+    <input type="text" id="qrStudentName" placeholder="이름 입력" />
+    <label for="qrStudentDate">날짜:</label>
+    <input type="date" id="qrStudentDate" placeholder="날짜 입력" />
+
+    <br/>
+    <button onclick="generateQRCode()">생성</button>
+    <div id="qrcode"></div>
+  </div>
+  <footer class="footer">
+    <p>© 2025 Online Entry. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // 버튼 클릭 시 폼 토글
+    document.getElementById("requestPageBtn").addEventListener("click", () => {
+      document.getElementById("requestForm").style.display = "block";
+      document.getElementById("qrGenerateForm").style.display = "none";
+    });
+
+    document.getElementById("qrGenerateFormBtn").addEventListener("click", () => {
+      document.getElementById("qrGenerateForm").style.display = "block";
+      document.getElementById("requestForm").style.display = "none";
+    });
+
+
+    // QR 생성 기능
+    function generateQRCode() {
+      const container = document.getElementById("qrcode");
+      container.innerHTML = ""; 
+
+      const id = document.getElementById("qrStudentId").value.trim();
+      const name = document.getElementById("qrStudentName").value.trim();
+      const date = document.getElementById("qrStudentDate").value.trim();
+
+      if (!id || !name || !date) {
+        alert("학번과 이름과 날짜를 모두 입력하세요.");
+        return;
+      }
+
+      const qrData = `https://onlineschoolentry.netlify.app/guard.html?id=${id}&date=${date}`;
+
+
+      new QRCode(container, {
+        text: qrData,
+        width: 200,
+        height: 200,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    }
+  </script>
+
+    <script type="module" src="./script/app.js"></script> 
+</body>
+</html>
